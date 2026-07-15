@@ -183,13 +183,18 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
   button.primary:hover { background: #1e293b; }
   button.danger { color: #ef4444; border-color: #fecaca; }
   button.danger:hover { background: #fef2f2; }
+
+  /* ── Przyciski ikon (emoji) w tabeli ── */
+  .btn-icon { padding: 4px 8px; border: none; background: none; font-size: 1.15em; cursor: pointer; border-radius: 6px; transition: all 0.2s; line-height: 1; vertical-align: middle; }
+  .btn-icon:hover { background: #f1f5f9; transform: scale(1.1); }
+  .btn-icon-danger:hover { background: #fef2f2; }
   
   table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
   th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 0.95em; }
   th { background: #f8fafc; font-weight: 600; color: #475569; border-bottom: 2px solid #e2e8f0; }
   tr:last-child td { border-bottom: none; }
   .inactive td { color: #94a3b8; }
-  .inactive td.actions button { opacity: 0.7; }
+  .inactive td.actions .btn-icon { opacity: 0.5; }
   
   .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 0.8em; font-weight: 600; }
   .badge.active { background: #d1fae5; color: #065f46; }
@@ -203,9 +208,6 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
   tr.dragging { opacity: 0.35; background: #f1f5f9; }
   tr.drag-over { box-shadow: inset 0 2px 0 0 #3b82f6; }
   .order-col { width: 42px; text-align: center; color: #94a3b8; font-size: 0.85em; }
-
-  button.btn-edit { color: #2563eb; border-color: #bfdbfe; }
-  button.btn-edit:hover { background: #eff6ff; }
 
   /* ── Modal edycji ── */
   .edit-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
@@ -312,17 +314,17 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
               <?= $t['active'] ? 'Aktywne' : 'Nieaktywne' ?>
             </span>
           </td>
-          <td class="actions" style="text-align: right;">
-            <button type="button" class="btn-edit" onclick="openEditModal(<?= $t['id'] ?>, '<?= htmlspecialchars($t['name'], ENT_QUOTES) ?>', <?= $t['location_id'] ?? 'null' ?>)">Edytuj</button>
+          <td class="actions" style="text-align: right; white-space: nowrap;">
+            <button type="button" class="btn-icon" title="Edytuj zadanie" onclick="openEditModal(<?= $t['id'] ?>, '<?= htmlspecialchars($t['name'], ENT_QUOTES) ?>', <?= $t['location_id'] ?? 'null' ?>)">&#9998;</button>
             <form method="post" style="display:inline">
               <input type="hidden" name="action" value="toggle">
               <input type="hidden" name="id" value="<?= $t['id'] ?>">
-              <button type="submit"><?= $t['active'] ? 'Dezaktywuj' : 'Aktywuj' ?></button>
+              <button type="submit" class="btn-icon" title="<?= $t['active'] ? 'Dezaktywuj zadanie' : 'Aktywuj zadanie' ?>"><?= $t['active'] ? '&#128259;' : '&#128258;' ?></button>
             </form>
             <form method="post" style="display:inline" onsubmit="return confirm('Czy na pewno chcesz usunąć to zadanie? Usunie to również jego dzisiejsze statusy.')">
               <input type="hidden" name="action" value="delete">
               <input type="hidden" name="id" value="<?= $t['id'] ?>">
-              <button type="submit" class="danger">Usuń</button>
+              <button type="submit" class="btn-icon btn-icon-danger" title="Usuń zadanie">&#128465;</button>
             </form>
           </td>
         </tr>
