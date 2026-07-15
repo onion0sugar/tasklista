@@ -19,6 +19,7 @@ $labels = [
     'completed'     => ['Wykonane',          '#059669', '#d1fae5'],
     'repeat'        => ['Ponowna próba',     '#d97706', '#fef3c7'],
     'created'       => ['Utworzone',         '#2563eb', '#dbeafe'],
+    'renamed'       => ['Edytowane',         '#7c3aed', '#ede9fe'],
     'deleted'       => ['Usunięte',          '#dc2626', '#fee2e2'],
     'activated'     => ['Aktywowane',        '#2563eb', '#dbeafe'],
     'deactivated'   => ['Dezaktywowane',     '#4b5563', '#f3f4f6'],

@@ -35,6 +35,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                ->execute([':tid' => $id, ':name' => $t['name'], ':action' => $actionName]);
             $msg = 'Status zadania został zmieniony.';
         }
+    } elseif ($action === 'edit') {
+        $id = (int)($_POST['id'] ?? 0);
+        $name = trim($_POST['name'] ?? '');
+        $locId = !empty($_POST['location_id']) ? (int)$_POST['location_id'] : null;
+        if ($id > 0 && $name !== '') {
+            $stmt = $db->prepare("SELECT name FROM tasks WHERE id = :id");
+            $stmt->execute([':id' => $id]);
+            $old = $stmt->fetch();
+            if ($old) {
+                $db->prepare("UPDATE tasks SET name = :name, location_id = :loc_id WHERE id = :id")
+                   ->execute([':name' => $name, ':loc_id' => $locId, ':id' => $id]);
+                $db->prepare("INSERT INTO logs (task_id, task_name, action, date, logged_at) VALUES (:tid, :name, 'renamed', CURDATE(), NOW())")
+                   ->execute([':tid' => $id, ':name' => $old['name'] . ' → ' . $name]);
+                $msg = 'Zadanie zostało zaktualizowane.';
+            }
+        }
     } elseif ($action === 'delete') {
         $id = (int)($_POST['id'] ?? 0);
         $stmt = $db->prepare("SELECT name FROM tasks WHERE id = :id");
@@ -188,6 +204,29 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
   tr.drag-over { box-shadow: inset 0 2px 0 0 #3b82f6; }
   .order-col { width: 42px; text-align: center; color: #94a3b8; font-size: 0.85em; }
 
+  button.btn-edit { color: #2563eb; border-color: #bfdbfe; }
+  button.btn-edit:hover { background: #eff6ff; }
+
+  /* ── Modal edycji ── */
+  .edit-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
+  .edit-modal.active { display: flex; }
+  .edit-modal-content { background-color: #fff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; width: 90%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); animation: modalSlide 0.3s ease; }
+  @keyframes modalSlide { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .edit-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .edit-modal-header h3 { margin: 0; font-size: 1.15em; font-weight: 600; color: #0f172a; }
+  .close-edit-modal { font-size: 1.5em; font-weight: bold; color: #94a3b8; cursor: pointer; line-height: 1; transition: color 0.2s; }
+  .close-edit-modal:hover { color: #0f172a; }
+  .edit-modal form { display: flex; flex-direction: column; gap: 16px; }
+  .edit-modal label { font-weight: 600; font-size: 0.9em; color: #475569; }
+  .edit-modal input[type=text], .edit-modal select { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95em; outline: none; background: #fff; box-sizing: border-box; }
+  .edit-modal input[type=text]:focus, .edit-modal select:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.1); }
+  .edit-modal-actions { display: flex; gap: 10px; margin-top: 8px; }
+  .edit-modal-actions button { flex: 1; padding: 10px; border-radius: 8px; font-size: 0.9em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .edit-modal-actions .btn-cancel { background: #fff; color: #475569; border: 1px solid #cbd5e1; }
+  .edit-modal-actions .btn-cancel:hover { background: #f1f5f9; }
+  .edit-modal-actions .btn-save { background: #0f172a; color: #fff; border: 1px solid #0f172a; }
+  .edit-modal-actions .btn-save:hover { background: #1e293b; }
+
   /* Toast powiadomienie */
   #orderToast { position: fixed; bottom: 24px; right: 24px; background: #10b981; color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 0.9em; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); opacity: 0; transform: translateY(8px); transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 999; }
   #orderToast.show { opacity: 1; transform: translateY(0); }
@@ -274,6 +313,7 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
             </span>
           </td>
           <td class="actions" style="text-align: right;">
+            <button type="button" class="btn-edit" onclick="openEditModal(<?= $t['id'] ?>, '<?= htmlspecialchars($t['name'], ENT_QUOTES) ?>', <?= $t['location_id'] ?? 'null' ?>)">Edytuj</button>
             <form method="post" style="display:inline">
               <input type="hidden" name="action" value="toggle">
               <input type="hidden" name="id" value="<?= $t['id'] ?>">
@@ -538,6 +578,61 @@ function showToast(msg) {
 
 <!-- Toast powiadomienie -->
 <div id="orderToast"></div>
+
+<!-- ================= MODAL EDYCJI ZADANIA ================= -->
+<div id="editTaskModal" class="edit-modal">
+  <div class="edit-modal-content">
+    <div class="edit-modal-header">
+      <h3>Edytuj zadanie</h3>
+      <span class="close-edit-modal" onclick="closeEditModal()">&times;</span>
+    </div>
+    <form method="post" action="admin.php">
+      <input type="hidden" name="action" value="edit">
+      <input type="hidden" name="id" id="edit_task_id" value="">
+      <div>
+        <label for="edit_task_name">Nazwa zadania</label>
+        <input type="text" name="name" id="edit_task_name" required>
+      </div>
+      <div>
+        <label for="edit_task_location">Lokalizacja</label>
+        <select name="location_id" id="edit_task_location">
+          <option value="">— brak przypisanej lokalizacji —</option>
+          <?php foreach ($locations as $loc): ?>
+            <option value="<?= $loc['id'] ?>"><?= htmlspecialchars($loc['name']) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <div class="edit-modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeEditModal()">Anuluj</button>
+        <button type="submit" class="btn-save">Zapisz zmiany</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ── Modal edycji zadania ── */
+function openEditModal(id, name, locationId) {
+  document.getElementById('edit_task_id').value = id;
+  document.getElementById('edit_task_name').value = name;
+  const locSelect = document.getElementById('edit_task_location');
+  if (locationId !== null && locationId !== undefined) {
+    locSelect.value = locationId;
+  } else {
+    locSelect.value = '';
+  }
+  document.getElementById('editTaskModal').classList.add('active');
+}
+
+function closeEditModal() {
+  document.getElementById('editTaskModal').classList.remove('active');
+}
+
+// Zamknij modal po kliknięciu poza zawartością
+document.getElementById('editTaskModal').addEventListener('click', function(e) {
+  if (e.target === this) closeEditModal();
+});
+</script>
 
 </body>
 </html>
