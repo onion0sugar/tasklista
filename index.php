@@ -85,6 +85,10 @@ $done  = array_sum(array_column($tasks, 'status'));
   .task-list tr:last-child td { border-bottom: none; }
   .task-list tr:hover td { background: #f8fafc; }
   
+  /* ── Kolorowe akcenty wierszy ── */
+  .row-done td:first-child { border-left: 4px solid #10b981; padding-left: 10px !important; }
+  .row-pending td:first-child { border-left: 4px solid #f59e0b; padding-left: 10px !important; }
+  
   .task-list .col-status { width: 90px; text-align: center; }
   .task-list .col-loc { width: 130px; }
   .task-list .col-who { width: 110px; }
@@ -185,7 +189,7 @@ $done  = array_sum(array_column($tasks, 'status'));
         $url = APP_URL . '/scan.php?task_id=' . $t['id'];
         $qr  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . urlencode($url);
     ?>
-    <tr>
+    <tr class="<?= $t['status'] ? 'row-done' : 'row-pending' ?>">
       <td><span class="task-name <?= $t['status'] ? 'done' : '' ?>"><?= htmlspecialchars($t['name']) ?></span></td>
       <td>
         <?php if (!empty($t['location_name'])): ?>
@@ -196,7 +200,7 @@ $done  = array_sum(array_column($tasks, 'status'));
       </td>
       <td class="col-status">
         <span class="badge <?= $t['status'] ? 'done' : 'pending' ?>">
-          <?= $t['status'] ? 'Tak' : 'Nie' ?>
+          <?= $t['status'] ? 'Wykonane' : 'Oczekuje' ?>
         </span>
       </td>
       <td class="col-who">
