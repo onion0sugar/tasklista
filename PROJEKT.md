@@ -12,7 +12,7 @@ tasklist/
 ├── setup.php           (2297 B)  — Instalator bazy danych — uruchomić RAZ, potem usunąć!
 ├── login.php           (3183 B)  — Strona logowania (admin i kierownik)
 ├── logout.php          (176 B)   — Wylogowanie + czyszczenie cookie
-├── index.php           (12897 B) — Panel administratora: lista zadań, filtr lokalizacji, modal QR
+├── index.php           (kompaktowa tabela) — Panel administratora: lista zadań, filtr lokalizacji, modal QR
 ├── admin.php           (24353 B) — Panel zarządzania: zadania (CRUD + drag&drop), lokalizacje, pracownicy, ustawienia
 ├── manager.php         (7897 B)  — Panel kierownika: podgląd tylko-do-odczytu z filtrem lokalizacji
 ├── scan.php            (20143 B) — Skaner QR: aparat (html5-qrcode), wybór pracownika, potwierdzenie, blokada czasowa
@@ -181,10 +181,10 @@ cron_reset.php     → brak (uruchamiany z crona CLI)
 - **Zapamiętanie aktywnej zakładki**: localStorage `admin_active_tab`
 
 ### 6.2. Panel główny admina (`index.php`)
-- Lista zadań na dziś z kartami (stan: wykonane/oczekuje)
-- Pasek postępu (procent wykonania)
-- Filtr według lokalizacji (select → GET `location_id`)
-- Modal QR: każde zadanie ma przycisk → pokazuje QR + kopiowanie linku + wydruk PDF
+- Lista zadań na dziś — **kompaktowa tabela** (6 kolumn: nazwa, lokalizacja, status Tak/Nie, wykonawca, godzina, QR)
+- Pasek postępu w wąskim pasku (procent wykonania)
+- Filtr według lokalizacji (select → GET `location_id`) w kompaktowym pasku
+- Modal QR: przycisk 🔍 w każdym wierszu → pokazuje QR + kopiowanie linku + wydruk PDF
 - QR generowany przez zewnętrzne API: `https://api.qrserver.com/v1/create-qr-code/`
 
 ### 6.3. Panel kierownika (`manager.php`)
@@ -208,6 +208,9 @@ cron_reset.php     → brak (uruchamiany z crona CLI)
 
 ### 6.5. Wydruk QR (`print.php`)
 - Generuje siatkę kodów QR dla wszystkich aktywnych zadań (lub jednego, jeśli `?task_id=N`)
+- **Checkboxy wyboru**: każde zadanie ma checkbox, "Zaznacz wszystko", licznik zaznaczonych
+- Przycisk dostosowuje się: "Drukuj wszystkie (N)" → "Drukuj zaznaczone (N)" → blokada gdy 0
+- Podczas druku ukrywane są odznaczone karty (klasa `print-hidden`)
 - Przycisk `window.print()` → drukarka / "Zapisz jako PDF"
 
 ### 6.6. Logi (`logs.php`)
