@@ -51,6 +51,7 @@ $done  = array_sum(array_column($tasks, 'status'));
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lista Zadań (Admin) – <?= $today ?></title>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
 <style>
   * { box-sizing: border-box; }
   body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 960px; margin: 0 auto; padding: 20px; background: #f8fafc; color: #1e293b; }
@@ -142,8 +143,8 @@ $done  = array_sum(array_column($tasks, 'status'));
 <nav>
   <a href="admin.php">+ Zarządzaj systemem</a>
   <a href="logs.php">Logi systemowe</a>
-  <a href="scan.php" target="_blank">&#128247; Skaner</a>
-  <a href="print.php" target="_blank">&#128438; Drukuj QR</a>
+  <a href="scan.php" target="_blank"><i class="ph-bold ph-camera"></i> Skaner</a>
+  <a href="print.php" target="_blank"><i class="ph-bold ph-printer"></i> Drukuj QR</a>
   <a href="logout.php" class="logout">Wyloguj</a>
 </nav>
 
@@ -218,7 +219,7 @@ $done  = array_sum(array_column($tasks, 'status'));
         <?php endif; ?>
       </td>
       <td class="col-qr">
-        <button class="btn-qr" onclick="openQRModal('<?= htmlspecialchars($t['name'], ENT_QUOTES) ?>', '<?= $qr ?>', '<?= htmlspecialchars($url, ENT_QUOTES) ?>', '<?= $t['id'] ?>')" title="Pokaż kod QR">&#128269;</button>
+        <button class="btn-qr" onclick="openQRModal('<?= htmlspecialchars($t['name'], ENT_QUOTES) ?>', '<?= $qr ?>', '<?= htmlspecialchars($url, ENT_QUOTES) ?>', '<?= $t['id'] ?>')" title="Pokaż kod QR"><i class="ph-bold ph-magnifying-glass"></i></button>
       </td>
     </tr>
     <?php endforeach; ?>
@@ -233,8 +234,8 @@ $done  = array_sum(array_column($tasks, 'status'));
     <h3 class="modal-title" id="modalTaskName">Nazwa zadania</h3>
     <img src="" id="modalQRImg" class="modal-qr-img" alt="Kod QR">
     <div class="modal-actions">
-      <button class="modal-btn copy" id="modalCopyBtn" onclick="copyModalLink()">&#128279; Kopiuj link</button>
-      <a href="" id="modalPrintBtn" target="_blank" class="modal-btn print">&#128438; Drukuj PDF</a>
+      <button class="modal-btn copy" id="modalCopyBtn" onclick="copyModalLink()"><i class="ph-bold ph-link"></i> Kopiuj link</button>
+      <a href="" id="modalPrintBtn" target="_blank" class="modal-btn print"><i class="ph-bold ph-printer"></i> Drukuj PDF</a>
     </div>
   </div>
 </div>
@@ -256,7 +257,7 @@ function openQRModal(name, qrUrl, scanUrl, taskId) {
   document.getElementById('modalPrintBtn').href = 'print.php?task_id=' + taskId;
   currentURL = scanUrl;
   const copyBtn = document.getElementById('modalCopyBtn');
-  copyBtn.innerHTML = '&#128279; Kopiuj link';
+  copyBtn.innerHTML = '<i class="ph-bold ph-link"></i> Kopiuj link';
   copyBtn.classList.remove('copied');
   document.getElementById('qrModal').classList.add('active');
 }
@@ -284,7 +285,7 @@ function copyModalLink() {
   btn.textContent = '✓ Skopiowano';
   btn.classList.add('copied');
   setTimeout(function() {
-    btn.innerHTML = '&#128279; Kopiuj link';
+    btn.innerHTML = '<i class="ph-bold ph-link"></i> Kopiuj link';
     btn.classList.remove('copied');
   }, 2000);
 }

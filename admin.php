@@ -149,6 +149,7 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Zarządzanie Systemem Zadań</title>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
 <style>
   * { box-sizing: border-box; }
   body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; background: #f8fafc; color: #1e293b; }
@@ -247,8 +248,8 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
 <div class="sub">Zarządzaj zadaniami, lokalizacjami i pracownikami</div>
 
 <nav>
-  <a href="index.php">&larr; Powrót do tablicy głównej</a>
-  <a href="manager.php">Panel Kierownika &rarr;</a>
+  <a href="index.php"><i class="ph-bold ph-arrow-left"></i> Powrót do tablicy głównej</a>
+  <a href="manager.php">Panel Kierownika <i class="ph-bold ph-arrow-right"></i></a>
 </nav>
 
 <?php if ($msg): ?><div class="msg"><?= htmlspecialchars($msg) ?></div><?php endif; ?>
@@ -281,8 +282,8 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
   <div class="card" style="padding: 0; overflow-x: auto;">
     <div style="padding: 16px 20px 0;">
       <div class="order-header-row">
-        <span class="order-hint">☰ Przeciągnij wiersz, aby zmienić kolejność zadań</span>
-        <button id="saveOrderBtn" onclick="saveOrder()">&#128190; Zapisz kolejność</button>
+        <span class="order-hint"><i class="ph-bold ph-grip-vertical"></i> Przeciągnij wiersz, aby zmienić kolejność zadań</span>
+        <button id="saveOrderBtn" onclick="saveOrder()"><i class="ph-bold ph-floppy-disk"></i> Zapisz kolejność</button>
       </div>
     </div>
     <table id="tasksTable">
@@ -300,7 +301,7 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
         <?php foreach ($tasks as $i => $t): ?>
         <tr class="<?= $t['active'] ? '' : 'inactive' ?>" data-id="<?= $t['id'] ?>" draggable="true">
           <td class="order-col"><?= $i + 1 ?></td>
-          <td><span class="drag-handle" title="Przeciągnij, aby zmienić kolejność">⠿</span></td>
+          <td><span class="drag-handle" title="Przeciągnij, aby zmienić kolejność"><i class="ph-bold ph-grip-vertical"></i></span></td>
           <td style="font-weight: 500;"><?= htmlspecialchars($t['name']) ?></td>
           <td>
             <?php if (!empty($t['location_name'])): ?>
@@ -315,16 +316,16 @@ $employees = $db->query("SELECT * FROM employees ORDER BY name")->fetchAll();
             </span>
           </td>
           <td class="actions" style="text-align: right; white-space: nowrap;">
-            <button type="button" class="btn-icon" title="Edytuj zadanie" onclick="openEditModal(<?= $t['id'] ?>, '<?= htmlspecialchars($t['name'], ENT_QUOTES) ?>', <?= $t['location_id'] ?? 'null' ?>)">&#9998;</button>
+            <button type="button" class="btn-icon" title="Edytuj zadanie" onclick="openEditModal(<?= $t['id'] ?>, '<?= htmlspecialchars($t['name'], ENT_QUOTES) ?>', <?= $t['location_id'] ?? 'null' ?>)"><i class="ph-bold ph-pencil"></i></button>
             <form method="post" style="display:inline">
               <input type="hidden" name="action" value="toggle">
               <input type="hidden" name="id" value="<?= $t['id'] ?>">
-              <button type="submit" class="btn-icon" title="<?= $t['active'] ? 'Dezaktywuj zadanie' : 'Aktywuj zadanie' ?>"><?= $t['active'] ? '&#128259;' : '&#128258;' ?></button>
+              <button type="submit" class="btn-icon" title="<?= $t['active'] ? 'Dezaktywuj zadanie' : 'Aktywuj zadanie' ?>"><?= $t['active'] ? '<i class="ph-bold ph-check-circle"></i>' : '<i class="ph-bold ph-circle"></i>' ?></button>
             </form>
             <form method="post" style="display:inline" onsubmit="return confirm('Czy na pewno chcesz usunąć to zadanie? Usunie to również jego dzisiejsze statusy.')">
               <input type="hidden" name="action" value="delete">
               <input type="hidden" name="id" value="<?= $t['id'] ?>">
-              <button type="submit" class="btn-icon btn-icon-danger" title="Usuń zadanie">&#128465;</button>
+              <button type="submit" class="btn-icon btn-icon-danger" title="Usuń zadanie"><i class="ph-bold ph-trash"></i></button>
             </form>
           </td>
         </tr>
@@ -558,13 +559,13 @@ function saveOrder() {
   .then(r => r.json())
   .then(() => {
     btn.disabled = false;
-    btn.innerHTML = '&#128190; Zapisz kolejność';
+    btn.innerHTML = '<i class="ph-bold ph-floppy-disk"></i> Zapisz kolejność';
     btn.classList.remove('visible');
     showToast('Kolejność została zapisana ✓');
   })
   .catch(() => {
     btn.disabled = false;
-    btn.innerHTML = '&#128190; Zapisz kolejność';
+    btn.innerHTML = '<i class="ph-bold ph-floppy-disk"></i> Zapisz kolejność';
     btn.classList.add('visible');
     alert('Błąd podczas zapisu kolejności.');
   });

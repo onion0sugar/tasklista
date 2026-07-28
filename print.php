@@ -18,6 +18,7 @@ if ($taskId > 0) {
 <head>
 <meta charset="UTF-8">
 <title>Kody QR – wydruk</title>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: sans-serif; background: #fff; padding: 20px; }
@@ -54,8 +55,8 @@ if ($taskId > 0) {
 </head>
 <body>
 <div class="no-print">
-  <button id="printBtn" onclick="printSelected()">&#128438; Drukuj wszystkie</button>
-  <a href="index.php">&larr; Wróć</a>
+  <button id="printBtn" onclick="printSelected()"><i class="ph-bold ph-printer"></i> Drukuj wszystkie</button>
+  <a href="index.php"><i class="ph-bold ph-arrow-left"></i> Wróć</a>
 </div>
 
 <?php if (empty($tasks)): ?>
@@ -104,13 +105,13 @@ function updateCount() {
   const btn = document.getElementById('printBtn');
   if (checked === 0) {
     btn.disabled = true;
-    btn.innerHTML = '&#128438; Nie zaznaczono żadnych';
+    btn.innerHTML = '<i class="ph-bold ph-printer"></i> Nie zaznaczono żadnych';
   } else if (checked === total) {
     btn.disabled = false;
-    btn.innerHTML = '&#128438; Drukuj wszystkie (' + total + ')';
+    btn.innerHTML = '<i class="ph-bold ph-printer"></i> Drukuj wszystkie (' + total + ')';
   } else {
     btn.disabled = false;
-    btn.innerHTML = '&#128438; Drukuj zaznaczone (' + checked + ')';
+    btn.innerHTML = '<i class="ph-bold ph-printer"></i> Drukuj zaznaczone (' + checked + ')';
   }
 }
 

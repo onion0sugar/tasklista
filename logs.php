@@ -41,6 +41,7 @@ $backUrl = !empty($_SESSION['admin']) ? 'index.php' : 'manager.php';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Logi Systemowe – <?= htmlspecialchars($date) ?></title>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
 <style>
   * { box-sizing: border-box; }
   body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 960px; margin: 0 auto; padding: 20px; background: #f8fafc; color: #1e293b; }
@@ -89,11 +90,11 @@ $backUrl = !empty($_SESSION['admin']) ? 'index.php' : 'manager.php';
 </header>
 
 <nav>
-  <a href="<?= $backUrl ?>">&larr; Powrót do panelu</a>
+  <a href="<?= $backUrl ?>"><i class="ph-bold ph-arrow-left"></i> Powrót do panelu</a>
 </nav>
 
 <div class="date-bar">
-  <div class="date-bar-label">&#128197; Wybierz dzień:</div>
+  <div class="date-bar-label"><i class="ph-bold ph-calendar"></i> Wybierz dzień:</div>
   <div class="date-scroll">
     <?php
     $dowPl = ['Niedz.','Pon.','Wt.','Śr.','Czw.','Pt.','Sob.'];

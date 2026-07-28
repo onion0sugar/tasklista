@@ -180,6 +180,7 @@ if ($taskId > 0) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= $taskId > 0 ? 'Skan zadania' : 'Skaner Kodów QR' ?></title>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
 <style>
   * { box-sizing: border-box; }
   body { 
@@ -303,7 +304,7 @@ if ($taskId > 0) {
 
 <?php if ($taskId <= 0): ?>
   <!-- ── OGÓLNY SKANER (BEZ PARAMETRU TASK_ID) ─────────────────── -->
-  <div class="icon">&#128269;</div>
+  <div class="icon"><i class="ph-bold ph-magnifying-glass"></i></div>
   <h2>Skanowanie punktu</h2>
   <p>Zeskanuj kod QR z punktu kontrolnego lub wpisz go ręcznie poniżej.</p>
   
@@ -315,14 +316,14 @@ if ($taskId > 0) {
                style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1.1em; outline: none;">
       </div>
       <button type="button" class="btn-camera" onclick="openCamera()">
-        <span>&#128247;</span> Uruchom aparat w telefonie
+        <span><i class="ph-bold ph-camera"></i></span> Uruchom aparat w telefonie
       </button>
     </form>
   </div>
   
 <?php elseif ($isTimeBlocked): ?>
   <!-- ── BLOKADA CZASOWA ──────────────────────────────────────── -->
-  <div class="icon dup">&#128338;</div>
+  <div class="icon dup"><i class="ph-bold ph-clock"></i></div>
   <h2>Skanowanie zablokowane</h2>
   <div class="card">
     <p style="font-weight: 600; font-size: 1.15em; color: #ef4444; margin-bottom: 12px; line-height: 1.4;">
@@ -335,13 +336,13 @@ if ($taskId > 0) {
   
   <div style="margin-top: 24px;">
     <a href="scan.php" class="btn-camera" style="text-decoration: none;">
-      <span>&larr;</span> Wróć do skanera ogólnego
+      <span><i class="ph-bold ph-arrow-left"></i></span> Wróć do skanera ogólnego
     </a>
   </div>
 
 <?php elseif ($alreadyDone): ?>
   <!-- ── JUŻ WYKONANE / WŁAŚNIE POTWIERDZONE ───────────────────── -->
-  <div class="icon ok">&#10003;</div>
+  <div class="icon ok"><i class="ph-bold ph-check"></i></div>
   <h2>Wykonane!</h2>
   <div class="card">
     <p style="font-weight: 600; font-size: 1.1em; color: #0f172a;"><?= htmlspecialchars($task['name']) ?></p>
@@ -360,7 +361,7 @@ if ($taskId > 0) {
     <form id="scanFormNext" onsubmit="event.preventDefault(); processScanInput();">
       <input type="text" id="next_scan_input" placeholder="Zeskanuj kolejny kod QR..." autocomplete="off" autofocus>
       <button type="button" class="btn-camera" onclick="openCamera()">
-        <span>&#128247;</span> Uruchom aparat w telefonie
+        <span><i class="ph-bold ph-camera"></i></span> Uruchom aparat w telefonie
       </button>
     </form>
   </div>
@@ -410,7 +411,7 @@ if ($taskId > 0) {
           <label for="remember" style="margin:0;font-size:.9em;cursor:pointer;user-select:none">Zapamiętaj mnie na tę zmianę (8h)</label>
         </div>
 
-        <button type="submit" class="btn-confirm">&#10003;&nbsp; Potwierdź wykonanie</button>
+        <button type="submit" class="btn-confirm"><i class="ph-bold ph-check"></i>&nbsp; Potwierdź wykonanie</button>
       </form>
     <?php endif; ?>
   </div>
@@ -421,7 +422,7 @@ if ($taskId > 0) {
     <form id="scanFormNext" onsubmit="event.preventDefault(); processScanInput();">
       <input type="text" id="next_scan_input" placeholder="Zeskanuj inny kod QR..." autocomplete="off">
       <button type="button" class="btn-camera" onclick="openCamera()">
-        <span>&#128247;</span> Uruchom aparat w telefonie
+        <span><i class="ph-bold ph-camera"></i></span> Uruchom aparat w telefonie
       </button>
     </form>
   </div>

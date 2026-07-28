@@ -51,6 +51,7 @@ $done  = array_sum(array_column($tasks, 'status'));
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Panel Kierownika – Zadania</title>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
 <style>
   * { box-sizing: border-box; }
   body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 960px; margin: 0 auto; padding: 20px; background: #f8fafc; color: #1e293b; }
@@ -103,7 +104,7 @@ $done  = array_sum(array_column($tasks, 'status'));
 
 <nav>
   <a href="logs.php">Logi systemowe</a>
-  <a href="scan.php" target="_blank">&#128247; Skaner aparat/czytnik</a>
+  <a href="scan.php" target="_blank"><i class="ph-bold ph-camera"></i> Skaner</a>
   <a href="logout.php" class="logout">Wyloguj</a>
 </nav>
 
